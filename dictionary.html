@@ -3,36 +3,63 @@
 <head>
     <meta charset="utf-8">
     <title>Search Vocabulary</title>
-  <style>
-    body {
-      background-color:#c9c4fc;
-      font-family:sans-serif;
-    }
-    #container {
-      background-color:white;
-      border-radius:3%;
-    }
-    #searchInput {
-      width:200px;
-      height:30px;
-      color:#8cb599;
-      background-color:#e5f1ff;
-    }
-  </style>
+
+    <style>
+        body {
+            background-color: #c9c4fc;
+            font-family: sans-serif;
+        }
+
+        #container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        #searchInput {
+            width: 100%;
+            height: 36px;
+            padding: 6px;
+            font-size: 16px;
+            color: #4b6b8a;
+            background-color: #e5f1ff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .word {
+            margin-top: 12px;
+            padding: 10px;
+            background-color: #f7f7ff;
+            border-radius: 6px;
+        }
+    </style>
 </head>
 
 <body>
+
 <div id="container">
-  <h1>Word dictionary</h1>
-<input id="searchInput" placeholder="Search your words here">
-  <a href="index.html">Or create some vocabulary words</a>
-<div id="results"></div>
+    <h1>Word dictionary</h1>
+
+    <!-- Search input -->
+    <input id="searchInput" placeholder="Search your words here">
+
+    <p>
+        <a href="index.html">Or create some vocabulary words</a>
+    </p>
+
+    <!-- Search results -->
+    <div id="results"></div>
 </div>
+
 <script>
     // 1. Load saved words from localStorage
     var wordsArray = JSON.parse(localStorage.getItem("myWords")) || [];
 
-    // 2. Connect to HTML
+    // 2. Connect to HTML elements
     var searchInput = document.getElementById("searchInput");
     var resultsDiv = document.getElementById("results");
 
@@ -41,7 +68,7 @@
         resultsDiv.innerHTML = "";
 
         if (list.length === 0) {
-            resultsDiv.innerHTML = "<p>Sorry, no matches found</p>";
+            resultsDiv.innerHTML = "<p>Sorry, no matches found.</p>";
             return;
         }
 
@@ -53,9 +80,9 @@
 
             div.innerHTML =
                 "<strong>Word:</strong> " + wordObj.word + "<br>" +
-                "<strong>Synonyms:</strong> " + wordObj.synonyms + "<br>" +
-                "<strong>Meaning:</strong> " + wordObj.meaning + "<br>" +
-                "<strong>Example:</strong> " + wordObj.example;
+                "<strong>Synonyms:</strong> " + (wordObj.synonyms || "") + "<br>" +
+                "<strong>Meaning:</strong> " + (wordObj.meaning || "") + "<br>" +
+                "<strong>Example:</strong> " + (wordObj.example || "");
 
             resultsDiv.appendChild(div);
         }
@@ -66,12 +93,13 @@
         var searchTerm = searchInput.value.toLowerCase();
 
         var filteredWords = wordsArray.filter(function(wordObj) {
-           return (
-    (wordObj.word || "").toLowerCase().includes(searchTerm) ||
-    (wordObj.synonyms || "").toLowerCase().includes(searchTerm) ||
-    (wordObj.meaning || "").toLowerCase().includes(searchTerm) ||
-    (wordObj.example || "").toLowerCase().includes(searchTerm)
-);
+            return (
+                (wordObj.word || "").toLowerCase().includes(searchTerm) ||
+                (wordObj.synonyms || "").toLowerCase().includes(searchTerm) ||
+                (wordObj.meaning || "").toLowerCase().includes(searchTerm) ||
+                (wordObj.example || "").toLowerCase().includes(searchTerm)
+            );
+        });
 
         showWords(filteredWords);
     }
